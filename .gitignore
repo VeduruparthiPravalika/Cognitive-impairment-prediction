@@ -1,0 +1,12 @@
+# Root node modules
+node_modules/
+frontend/node_modules/
+backend/node_modules/
+
+# Python
+__pycache__/
+*.pyc
+*.pkl
+
+# Env files
+.env
