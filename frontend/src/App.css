@@ -2,14 +2,7 @@
 body {
   margin: 0;
   min-height: 100vh;
-  background: linear-gradient(
-    135deg,
-    #ff9a9e,
-    #fad0c4,
-    #fad0c4,
-    #a1c4fd,
-    #c2e9fb
-  );
+  background: #f6f7fb;
   font-family: "Poppins", "Segoe UI", sans-serif;
 }
 
@@ -23,18 +16,18 @@ body {
 /* Title */
 h1 {
   text-align: center;
-  color: #2d2d2d;
+  color: #2f2f3a;
   margin-bottom: 30px;
-  font-weight: 700;
-  letter-spacing: 1px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
 }
 
 /* Main card */
 .card {
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: 22px;
+  background: #ffffff;
+  border-radius: 18px;
   padding: 32px;
-  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.08);
 }
 
 /* Grid */
@@ -46,112 +39,97 @@ h1 {
 
 /* Labels */
 label {
-  font-weight: 600;
-  color: #444;
+  font-weight: 500;
+  color: #4a4a55;
 }
 
 /* Inputs */
 input,
 select {
   padding: 11px 14px;
-  border-radius: 12px;
-  border: 2px solid #e6e6e6;
+  border-radius: 10px;
+  border: 1.5px solid #dcdde4;
   font-size: 14px;
-  transition: all 0.35s ease;
+  background: #fafafa;
+  transition: all 0.25s ease;
 }
 
-/* Focus effects (rainbow border) */
+/* Input focus */
 input:focus,
 select:focus {
   outline: none;
-  border-image: linear-gradient(
-      90deg,
-      #ff6a00,
-      #ee0979,
-      #00c6ff,
-      #00f260
-    )
-    1;
-  box-shadow: 0 0 0 3px rgba(0, 198, 255, 0.25);
+  border-color: #9bb7f0;
+  background: #ffffff;
+  box-shadow: 0 0 0 2px rgba(155, 183, 240, 0.2);
 }
 
 /* Predict button */
 button {
-  margin-top: 32px;
-  width: 100%;
-  padding: 16px;
-  font-size: 18px;
-  font-weight: bold;
-  color: #fff;
+  margin-top: 28px;
+  width: 220px;
+  padding: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  color: white;
   border: none;
-  border-radius: 16px;
+  border-radius: 10px;
   cursor: pointer;
-  background: linear-gradient(
-    90deg,
-    #ff512f,
-    #f09819,
-    #56ab2f,
-    #00c6ff
-  );
-  background-size: 300% 300%;
-  animation: gradientMove 6s ease infinite;
-  transition: transform 0.3s ease;
+  background: #8faadc;
+  margin: 12px auto;
+  transition: all 0.25s ease;
+}
+/* Primary button */
+button:first-of-type {
+  background: #8faadc;
 }
 
+/* Secondary button */
+button:last-of-type {
+  background: #c8d4f0;
+  color: #2f2f3a;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 button:hover {
-  transform: translateY(-3px) scale(1.02);
-}
-
-/* Animated gradient */
-@keyframes gradientMove {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
+  background: #7899d4;
+  transform: translateY(-1px);
 }
 
 /* Result base */
 .result {
-  margin-top: 28px;
-  padding: 18px;
-  font-size: 22px;
-  font-weight: bold;
-  border-radius: 18px;
+  margin-top: 24px;
+  padding: 16px;
+  font-size: 20px;
+  font-weight: 600;
+  border-radius: 12px;
   text-align: center;
-  animation: popIn 0.6s ease-in-out;
 }
 
-/* High risk – neon magenta */
+/* High risk */
 .result.high {
-  background: linear-gradient(135deg, #ff0844, #ffb199);
-  color: #3a0000;
-  box-shadow: 0 0 20px rgba(255, 8, 68, 0.6),
-    0 0 40px rgba(255, 177, 153, 0.5);
+  background: #ffe4e6;
+  color: #b91c1c;
 }
 
-/* Low risk – aqua + lime */
+/* Low risk */
 .result.low {
-  background: linear-gradient(135deg, #00f2fe, #4facfe, #43e97b);
-  color: #004d40;
-  box-shadow: 0 0 20px rgba(0, 242, 254, 0.6),
-    0 0 40px rgba(67, 233, 123, 0.5);
+  background: #e6f4ea;
+  color: #1e7d4f;
 }
 
-/* Result animation */
-@keyframes popIn {
-  from {
-    opacity: 0;
-    transform: scale(0.9) translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-  }
+/* Error message */
+.error {
+  margin-top: 15px;
+  padding: 12px;
+  border-radius: 10px;
+  background: #fde8e8;
+  color: #c53030;
+  font-weight: 500;
+  text-align: center;
 }
 
 /* Mobile */
@@ -159,13 +137,4 @@ button:hover {
   .grid {
     grid-template-columns: 1fr;
   }
-}
-.error {
-  margin-top: 15px;
-  padding: 12px;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #ff9a9e, #fad0c4);
-  color: #7a0000;
-  font-weight: bold;
-  text-align: center;
 }

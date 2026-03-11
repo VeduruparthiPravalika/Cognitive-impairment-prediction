@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { predict } from "./api";
 import "./App.css";
+import Login from "./login";
 
 function App() {
+
   const [formData, setFormData] = useState({
     age: "",
     gender: "",
@@ -22,18 +23,20 @@ function App() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const userId = localStorage.getItem("userId");
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
     setError("");
-    setResult(null); // ✅ clear old result when user edits
+    setResult(null);
   };
 
   const handlePredict = async () => {
-    setResult(null); // ✅ clear old result immediately
+
+    setResult(null);
     setError("");
     setLoading(true);
 
-    // 🔴 Validation
     for (let key in formData) {
       if (formData[key] === "") {
         setError("⚠️ Please fill all fields before predicting.");
@@ -42,24 +45,33 @@ function App() {
       }
     }
 
-    const features = [
-      Number(formData.age),
-      Number(formData.gender),
-      Number(formData.education),
-      Number(formData.region),
-      Number(formData.marital),
-      Number(formData.chronic),
-      Number(formData.glucose),
-      Number(formData.bmi),
-      Number(formData.sleep),
-      Number(formData.activity),
-      Number(formData.smoking),
-      Number(formData.alcohol)
-    ];
-
     try {
-      const res = await predict(features);
-      setResult(res.prediction);
+
+      const response = await fetch("http://localhost:3001/predict", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          userId: userId,
+          age: Number(formData.age),
+          gender: Number(formData.gender),
+          education: Number(formData.education),
+          region: Number(formData.region),
+          marital_status: Number(formData.marital),
+          chronic_diseases: Number(formData.chronic),
+          glucose: Number(formData.glucose),
+          bmi: Number(formData.bmi),
+          sleep_quality: Number(formData.sleep),
+          physical_activity: Number(formData.activity),
+          smoking: Number(formData.smoking),
+          alcohol: Number(formData.alcohol)
+        })
+      });
+
+      const data = await response.json();
+      setResult(data.result);
+
     } catch (err) {
       setError("Something went wrong. Please try again.");
     }
@@ -67,12 +79,29 @@ function App() {
     setLoading(false);
   };
 
+  // Show login if not logged in
+  if (!userId) {
+    return <Login />;
+  }
+
   return (
     <div className="container">
+
       <h1>Cognitive Impairment Prediction</h1>
 
+      <button
+        onClick={() => {
+          localStorage.removeItem("userId");
+          window.location.reload();
+        }}
+      >
+        Logout
+      </button>
+
       <div className="card">
+
         <div className="grid">
+
           <label>Age</label>
           <input name="age" onChange={handleChange} />
 
@@ -129,24 +158,22 @@ function App() {
             <option value="0">No</option>
             <option value="1">Yes</option>
           </select>
+
         </div>
 
         <button onClick={handlePredict} disabled={loading}>
           {loading ? "Predicting..." : "Predict"}
         </button>
 
-        {/* Error Message */}
         {error && <div className="error">{error}</div>}
-
-        {/* Loading Message */}
         {loading && <div className="loading">Analyzing data...</div>}
 
-        {/* Result */}
         {result !== null && !loading && (
           <div className={`result ${result === 1 ? "high" : "low"}`}>
             {result === 1 ? "High Risk" : "Low Risk"}
           </div>
         )}
+
       </div>
     </div>
   );
