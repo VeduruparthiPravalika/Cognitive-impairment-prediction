@@ -4,7 +4,6 @@ const axios = require("axios");
 const pool = require("../config/db");
 
 router.post("/", async (req, res) => {
-
   try {
 
     const {
@@ -17,6 +16,8 @@ router.post("/", async (req, res) => {
       chronic_diseases,
       glucose,
       bmi,
+      mmse,
+      gds,
       sleep_quality,
       physical_activity,
       smoking,
@@ -24,18 +25,20 @@ router.post("/", async (req, res) => {
     } = req.body;
 
     const features = [
-      age,
-      gender,
-      education,
-      region,
-      marital_status,
-      chronic_diseases,
-      glucose,
-      bmi,
-      sleep_quality,
-      physical_activity,
-      smoking,
-      alcohol
+      Number(age),
+      Number(gender),
+      Number(education),
+      Number(region),
+      Number(marital_status),
+      Number(chronic_diseases),
+      Number(glucose),
+      Number(bmi),
+      Number(mmse),
+      Number(gds),
+      Number(sleep_quality),
+      Number(physical_activity),
+      Number(smoking),
+      Number(alcohol)
     ];
 
     const response = await axios.post(
@@ -43,14 +46,14 @@ router.post("/", async (req, res) => {
       { features }
     );
 
-    const result = response.data.result;
+    const result = response.data.prediction;
 
     await pool.query(
       `INSERT INTO predictions
       (user_id, age, gender, education, region, marital_status,
-      chronic_diseases, glucose, bmi, sleep_quality,
+      chronic_diseases, glucose, bmi, mmse, gds, sleep_quality,
       physical_activity, smoking, alcohol, result)
-      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14)`,
+      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16)`,
       [
         userId,
         age,
@@ -61,6 +64,8 @@ router.post("/", async (req, res) => {
         chronic_diseases,
         glucose,
         bmi,
+        mmse,
+        gds,
         sleep_quality,
         physical_activity,
         smoking,
@@ -75,7 +80,6 @@ router.post("/", async (req, res) => {
     console.error(error);
     res.status(500).json({ message: "Prediction failed" });
   }
-
 });
 
 module.exports = router;

@@ -12,7 +12,7 @@ app.use(express.json());
 app.use("/auth", authRoutes);
 app.use("/predict", predictRoutes);
 
-app.get("/test", (req, res) => {node
+app.get("/test", (req, res) => {
   res.send("Server working");
 });
 

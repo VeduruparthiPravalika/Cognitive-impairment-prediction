@@ -10,3 +10,5 @@ __pycache__/
 
 # Env files
 .env
+
+.ipynb_checkpoints/

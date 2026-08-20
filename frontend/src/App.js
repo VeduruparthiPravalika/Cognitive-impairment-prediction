@@ -3,7 +3,6 @@ import "./App.css";
 import Login from "./login";
 
 function App() {
-
   const [formData, setFormData] = useState({
     age: "",
     gender: "",
@@ -13,6 +12,8 @@ function App() {
     chronic: "",
     glucose: "",
     bmi: "",
+    mmse: "",
+    gds: "",
     sleep: "",
     activity: "",
     smoking: "",
@@ -26,13 +27,16 @@ function App() {
   const userId = localStorage.getItem("userId");
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+
     setError("");
     setResult(null);
   };
 
   const handlePredict = async () => {
-
     setResult(null);
     setError("");
     setLoading(true);
@@ -46,7 +50,6 @@ function App() {
     }
 
     try {
-
       const response = await fetch("http://localhost:3001/predict", {
         method: "POST",
         headers: {
@@ -62,6 +65,8 @@ function App() {
           chronic_diseases: Number(formData.chronic),
           glucose: Number(formData.glucose),
           bmi: Number(formData.bmi),
+          mmse: Number(formData.mmse),
+          gds: Number(formData.gds),
           sleep_quality: Number(formData.sleep),
           physical_activity: Number(formData.activity),
           smoking: Number(formData.smoking),
@@ -70,16 +75,21 @@ function App() {
       });
 
       const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Prediction failed");
+      }
+
       setResult(data.result);
 
     } catch (err) {
+      console.error(err);
       setError("Something went wrong. Please try again.");
     }
 
     setLoading(false);
   };
 
-  // Show login if not logged in
   if (!userId) {
     return <Login />;
   }
@@ -103,57 +113,135 @@ function App() {
         <div className="grid">
 
           <label>Age</label>
-          <input name="age" onChange={handleChange} />
+          <input
+            name="age"
+            type="number"
+            value={formData.age}
+            onChange={handleChange}
+          />
 
           <label>Gender</label>
-          <select name="gender" onChange={handleChange}>
+          <select
+            name="gender"
+            value={formData.gender}
+            onChange={handleChange}
+          >
             <option value="">Select</option>
             <option value="0">Female</option>
             <option value="1">Male</option>
           </select>
 
           <label>Education Level</label>
-          <input name="education" onChange={handleChange} />
+          <input
+            name="education"
+            type="number"
+            value={formData.education}
+            onChange={handleChange}
+          />
 
           <label>Region</label>
-          <select name="region" onChange={handleChange}>
+          <select
+            name="region"
+            value={formData.region}
+            onChange={handleChange}
+          >
             <option value="">Select</option>
-            <option value="0">Urban</option>
-            <option value="1">Rural</option>
+            <option value="0">Rural</option>
+            <option value="1">Urban</option>
           </select>
 
           <label>Marital Status</label>
-          <select name="marital" onChange={handleChange}>
+          <select
+            name="marital"
+            value={formData.marital}
+            onChange={handleChange}
+          >
             <option value="">Select</option>
-            <option value="0">Single</option>
+            <option value="0">Divorced</option>
             <option value="1">Married</option>
-            <option value="2">Widowed</option>
+            <option value="2">Single</option>
+            <option value="3">Widowed</option>
           </select>
 
           <label>Chronic Diseases</label>
-          <input name="chronic" onChange={handleChange} />
+          <input
+            name="chronic"
+            type="number"
+            value={formData.chronic}
+            onChange={handleChange}
+          />
 
           <label>Glucose Level</label>
-          <input name="glucose" onChange={handleChange} />
+          <input
+            name="glucose"
+            type="number"
+            step="any"
+            value={formData.glucose}
+            onChange={handleChange}
+          />
 
           <label>BMI</label>
-          <input name="bmi" onChange={handleChange} />
+          <input
+            name="bmi"
+            type="number"
+            step="any"
+            value={formData.bmi}
+            onChange={handleChange}
+          />
+
+          <label>MMSE Score</label>
+          <input
+            name="mmse"
+            type="number"
+            step="any"
+            value={formData.mmse}
+            onChange={handleChange}
+          />
+
+          <label>GDS Score</label>
+          <input
+            name="gds"
+            type="number"
+            step="any"
+            value={formData.gds}
+            onChange={handleChange}
+          />
 
           <label>Sleep Quality</label>
-          <input name="sleep" onChange={handleChange} />
+          <input
+            name="sleep"
+            type="number"
+            step="any"
+            value={formData.sleep}
+            onChange={handleChange}
+          />
 
           <label>Physical Activity</label>
-          <input name="activity" onChange={handleChange} />
+          <input
+            name="activity"
+            type="number"
+            step="any"
+            value={formData.activity}
+            onChange={handleChange}
+          />
 
           <label>Smoking</label>
-          <select name="smoking" onChange={handleChange}>
+          <select
+            name="smoking"
+            value={formData.smoking}
+            onChange={handleChange}
+          >
             <option value="">Select</option>
             <option value="0">No</option>
             <option value="1">Yes</option>
           </select>
 
           <label>Alcohol Use</label>
-          <select name="alcohol" onChange={handleChange}>
+          <select
+            name="alcohol"
+            value={formData.alcohol}
+            onChange={handleChange}
+          >
             <option value="">Select</option>
             <option value="0">No</option>
             <option value="1">Yes</option>
@@ -161,16 +249,32 @@ function App() {
 
         </div>
 
-        <button onClick={handlePredict} disabled={loading}>
+        <button
+          onClick={handlePredict}
+          disabled={loading}
+        >
           {loading ? "Predicting..." : "Predict"}
         </button>
 
-        {error && <div className="error">{error}</div>}
-        {loading && <div className="loading">Analyzing data...</div>}
+        {error && (
+          <div className="error">
+            {error}
+          </div>
+        )}
+
+        {loading && (
+          <div className="loading">
+            Analyzing data...
+          </div>
+        )}
 
         {result !== null && !loading && (
-          <div className={`result ${result === 1 ? "high" : "low"}`}>
-            {result === 1 ? "High Risk" : "Low Risk"}
+          <div
+            className={`result ${
+              Number(result) === 1 ? "high" : "low"
+            }`}
+          >
+            {Number(result) === 1 ? "High Risk" : "Low Risk"}
           </div>
         )}
 
