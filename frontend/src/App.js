@@ -50,7 +50,7 @@ function App() {
     }
 
     try {
-      const response = await fetch("http://localhost:3001/predict", {
+      const response = await fetch("https://cogni-risk-enginebackend.onrender.com/predict",{
         method: "POST",
         headers: {
           "Content-Type": "application/json"
