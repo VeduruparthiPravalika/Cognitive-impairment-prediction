@@ -77,9 +77,19 @@ router.post("/", async (req, res) => {
     res.json({ result });
 
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Prediction failed" });
-  }
+  console.error("========== PREDICTION ERROR ==========");
+  console.error("MESSAGE:", error.message);
+  console.error("STATUS:", error.response?.status);
+  console.error("DATA:", error.response?.data);
+  console.error("URL:", error.config?.url);
+  console.error("CODE:", error.code);
+  console.error("======================================");
+
+  res.status(500).json({
+    message: "Prediction failed",
+    error: error.message
+  });
+}
 });
 
 module.exports = router;
