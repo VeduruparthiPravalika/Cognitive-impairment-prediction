@@ -12,8 +12,8 @@ function Login() {
     try {
 
       const url = signupMode
-        ? "http://localhost:3001/auth/signup"
-        : "http://localhost:3001/auth/login";
+  ? "https://cogni-risk-enginebackend.onrender.com/auth/signup"
+  : "https://cogni-risk-enginebackend.onrender.com/auth/login";
 
       const res = await axios.post(url, { name, password });
 
