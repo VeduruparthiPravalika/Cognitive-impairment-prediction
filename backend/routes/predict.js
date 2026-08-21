@@ -42,9 +42,9 @@ router.post("/", async (req, res) => {
     ];
 
     const response = await axios.post(
-      "http://127.0.0.1:5000/predict",
-      { features }
-    );
+  `${process.env.ML_API_URL || "http://127.0.0.1:5000"}/predict`,
+  { features }
+);
 
     const result = response.data.prediction;
 
